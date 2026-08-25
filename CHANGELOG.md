@@ -1,5 +1,12 @@
 # Changelog
 
+## 0.1.1
+
+- Fixed the README's screenshot gallery not rendering on pub.dev. It used raw
+  HTML `<img>` tags inside a `<table>`, which render fine on GitHub but get
+  stripped by pub.dev's README sanitizer — only plain Markdown image syntax
+  (`![alt](path)`) gets resolved against the repository. No code changes.
+
 ## 0.1.0
 
 First release.

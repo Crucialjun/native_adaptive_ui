@@ -29,18 +29,14 @@ widget renders against that.
 
 ## Same code, every era
 
-<table>
-<tr>
-<td><img src="screenshots/controls_liquid_glass.png" width="220" alt="iOS 26 — floating Liquid Glass tab bar"></td>
-<td><img src="screenshots/controls_classic.png" width="220" alt="iOS 18 — flat classic Cupertino"></td>
-<td><img src="screenshots/ipad_sidebar.png" width="320" alt="iPadOS 26 — sidebar navigation"></td>
-</tr>
-<tr>
-<td align="center">iOS 26 · Liquid Glass</td>
-<td align="center">iOS 18 · classic</td>
-<td align="center">iPadOS 26 · sidebar</td>
-</tr>
-</table>
+![iOS 26 — floating Liquid Glass tab bar](screenshots/controls_liquid_glass.png)
+*iOS 26 · Liquid Glass*
+
+![iOS 18 — flat classic Cupertino](screenshots/controls_classic.png)
+*iOS 18 · classic*
+
+![iPadOS 26 — sidebar navigation](screenshots/ipad_sidebar.png)
+*iPadOS 26 · sidebar*
 
 The same `AdaptiveNavigationScaffold` and `AdaptiveButton` calls, run on iOS 26,
 iOS 18 and iPadOS 26 without an `if (Platform.isIOS)` in sight. The example
