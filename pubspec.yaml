@@ -1,9 +1,9 @@
 name: native_adaptive_ui
 description: >-
-  Adaptive Flutter widgets that resolve by platform, OS version and form factor:
-  Liquid Glass on iOS 26, Material 3 Expressive on Android 16, iPad-aware
-  layouts, with safe fallbacks everywhere else.
-version: 0.1.1
+  Adaptive Flutter widgets that resolve by platform, OS version, and form
+  factor — Liquid Glass on iOS 26, Material 3 Expressive on Android 16,
+  iPad-aware layouts.
+version: 0.1.2
 repository: https://github.com/gauravrajkagwaniya/native_adaptive_ui
 issue_tracker: https://github.com/gauravrajkagwaniya/native_adaptive_ui/issues
 documentation: https://github.com/gauravrajkagwaniya/native_adaptive_ui#readme

@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.1.2
+
+- Shortened `pubspec.yaml`'s `description` to pub.dev's 60-180 character
+  limit (was 196 characters, costing 10 pub points under "Follow Dart file
+  conventions"). No code changes.
+
 ## 0.1.1
 
 - Fixed the README's screenshot gallery not rendering on pub.dev. It used raw
