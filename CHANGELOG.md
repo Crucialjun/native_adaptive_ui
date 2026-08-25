@@ -6,6 +6,21 @@ First release.
 
 Fixed before release, from device testing on iOS 26 and iPad:
 
+- The sidebar layout's detail pane could go stale after its first build.
+  `AdaptiveNavigationScaffold`'s per-tab `Navigator` captured `body` in a
+  closure at first push; `onGenerateRoute` only reruns for newly pushed
+  routes, so a later rebuild — the Design tab's era picker, for one — never
+  reached the mounted root route, and state built from a constructor field
+  (like the "Preview as" checkmark) froze while the surrounding chrome kept
+  re-theming correctly. The current `body` now reaches the root route through
+  an `InheritedWidget` instead.
+- The anchored popover sat 6pt off its anchor with no shadow, reading as a
+  flat card pasted on the page rather than a card floating above it; it now
+  keeps a visible gap, a shadow, and an arrow colour matched to the glass
+  card's own tint. Popover content is also wrapped in a transparent
+  `Material`, so content with no Material ancestor of its own (a plain
+  `Text`, dropped into the popover from an Android build) no longer falls
+  back to Flutter's debug text style.
 - Cupertino glyphs rendered as "?" boxes. The package draws from the
   CupertinoIcons font (`CupertinoListTileChevron` and friends) but did not
   depend on `cupertino_icons`, so the font never reached consuming apps.

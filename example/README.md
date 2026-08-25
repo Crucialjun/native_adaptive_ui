@@ -1,17 +1,24 @@
-# native_adaptive_ui_example
+# native_adaptive_ui example
 
-A new Flutter project.
+A gallery app that exercises every widget in `native_adaptive_ui`, and doubles
+as the package's own design-review tool.
 
-## Getting Started
+- **Controls** — buttons, a segmented control, switch, slider, text fields, an
+  alert and an action sheet / popover.
+- **Lists** — an inset-grouped list section with a pushed detail screen.
+- **More** — search, a popover, a split view, and the Material 3 Expressive
+  slider sizes.
+- **Design** — shows the detected platform, form factor and `DesignEra`, and
+  lets you preview *any* era on the machine you're running on. That is how
+  the screenshots in the root [README](../README.md) were produced.
 
-This project is a starting point for a Flutter application.
+## Run it
 
-A few resources to get you started if this is your first Flutter project:
+```sh
+cd example
+flutter run
+```
 
-- [Learn Flutter](https://docs.flutter.dev/get-started/learn-flutter)
-- [Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Flutter learning resources](https://docs.flutter.dev/reference/learning-resources)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+Pick any destination in the **Design** tab's "Preview as" list to re-render
+the whole app as iOS 26, iOS 18, iPadOS, Android 16, or macOS Tahoe — without
+needing a device for each.

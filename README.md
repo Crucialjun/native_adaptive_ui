@@ -27,6 +27,26 @@ device. It is adaptive to the *platform* and blind to the *version*.
 `native_adaptive_ui` resolves a **`DesignEra`** from all three inputs, and every
 widget renders against that.
 
+## Same code, every era
+
+<table>
+<tr>
+<td><img src="screenshots/controls_liquid_glass.png" width="220" alt="iOS 26 — floating Liquid Glass tab bar"></td>
+<td><img src="screenshots/controls_classic.png" width="220" alt="iOS 18 — flat classic Cupertino"></td>
+<td><img src="screenshots/ipad_sidebar.png" width="320" alt="iPadOS 26 — sidebar navigation"></td>
+</tr>
+<tr>
+<td align="center">iOS 26 · Liquid Glass</td>
+<td align="center">iOS 18 · classic</td>
+<td align="center">iPadOS 26 · sidebar</td>
+</tr>
+</table>
+
+The same `AdaptiveNavigationScaffold` and `AdaptiveButton` calls, run on iOS 26,
+iOS 18 and iPadOS 26 without an `if (Platform.isIOS)` in sight. The example
+app's own [era picker](screenshots/design_era_picker.png) is what generated
+these — any `DesignEra` renders on any machine, device lab not required.
+
 ## Install
 
 ```yaml
@@ -298,4 +318,3 @@ does not have.
 ## License
 
 MIT
-# native_adaptive_ui

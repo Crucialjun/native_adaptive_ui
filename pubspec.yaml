@@ -15,6 +15,26 @@ topics:
   - material
   - platform
 
+screenshots:
+  - description: >-
+      iOS 26 — the floating Liquid Glass tab bar and continuous corners,
+      rendered from a real UITabBar.
+    path: screenshots/controls_liquid_glass.png
+  - description: >-
+      Same screen, same code, previewed as iOS 18 — flat Cupertino and a
+      pinned tab bar instead of glass.
+    path: screenshots/controls_classic.png
+  - description: An inset-grouped list with Apple's small-caps section styling.
+    path: screenshots/lists_liquid_glass.png
+  - description: >-
+      iPadOS 26 sidebar navigation, picked automatically for the wider
+      window — same widgets, no separate iPad code path.
+    path: screenshots/ipad_sidebar.png
+  - description: >-
+      The example app's own era picker: any DesignEra can be previewed on
+      one device, which is how the screenshots above were made.
+    path: screenshots/design_era_picker.png
+
 environment:
   sdk: ">=3.6.0 <4.0.0"
   flutter: ">=3.27.0"

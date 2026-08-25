@@ -207,7 +207,9 @@ class AdaptiveScaffold extends StatelessWidget {
           leadingSfSymbol ?? (autoBack ? 'chevron.backward' : null);
       final effectiveOnLeadingPressed = leadingSfSymbol != null
           ? onLeadingPressed
-          : (autoBack ? () => Navigator.of(context).maybePop() : onLeadingPressed);
+          : (autoBack
+              ? () => Navigator.of(context).maybePop()
+              : onLeadingPressed);
 
       return CupertinoPageScaffold(
         backgroundColor: surface,
