@@ -454,7 +454,9 @@ class _PopoverOverlay<T> extends StatelessWidget {
   Widget build(BuildContext context) {
     final left = (anchorRect.center.dx - width / 2)
         .clamp(_margin, overlaySize.width - width - _margin);
-    final top = anchorRect.bottom + 6;
+    // A visible gap, not just enough to clear the anchor — 6pt read as the
+    // card touching the button it came from rather than floating above it.
+    final top = anchorRect.bottom + 12;
     final arrowDx = (anchorRect.center.dx - left).clamp(16.0, width - 16.0);
 
     final isDark =
@@ -463,8 +465,12 @@ class _PopoverOverlay<T> extends StatelessWidget {
     final fallbackColor = tokens.era.isApple
         ? CupertinoColors.secondarySystemBackground.resolveFrom(context)
         : Theme.of(context).colorScheme.surfaceContainerHigh;
+    // Matches GlassSurface's own untinted base colour (liquid_glass.dart) —
+    // not plain white — so the solid arrow reads as the same material as the
+    // translucent card it's attached to, rather than a visibly brighter
+    // triangle sitting on top of it.
     final arrowColor = tokens.hasGlass
-        ? (isDark ? const Color(0xFF3A3A3C) : const Color(0xFFFFFFFF))
+        ? (isDark ? const Color(0xFFFFFFFF) : const Color(0xFFE5E5EA))
             .withValues(alpha: isDark ? 0.85 : 0.95)
         : fallbackColor;
 
@@ -488,12 +494,41 @@ class _PopoverOverlay<T> extends StatelessWidget {
                 size: const Size(_arrowWidth, _arrowHeight),
                 painter: _PopoverArrowPainter(dx: arrowDx, color: arrowColor),
               ),
-              ConditionalGlass(
-                tokens: tokens,
-                borderRadius: tokens.radius(),
-                fallbackColor: fallbackColor,
-                padding: EdgeInsets.all(tokens.spacing * 1.5),
-                child: Builder(builder: builder),
+              // A shadow, not just the glass tint, is what actually reads as
+              // "floating above the page" rather than "a flat card pasted on
+              // top of it" — the same reasoning _GlassTabBar's own shadow
+              // documents for the capsule.
+              DecoratedBox(
+                decoration: BoxDecoration(
+                  borderRadius: tokens.radius(),
+                  boxShadow: [
+                    BoxShadow(
+                      color: const Color(0xFF000000).withValues(alpha: 0.2),
+                      blurRadius: 24,
+                      offset: const Offset(0, 8),
+                    ),
+                  ],
+                ),
+                child: ConditionalGlass(
+                  tokens: tokens,
+                  borderRadius: tokens.radius(),
+                  fallbackColor: fallbackColor,
+                  padding: EdgeInsets.all(tokens.spacing * 1.5),
+                  // This popover is inserted straight into the root Overlay
+                  // (see showAdaptivePopover), bypassing whatever Scaffold
+                  // the calling page itself sits in — so builder's content
+                  // has no Material ancestor to inherit a real
+                  // DefaultTextStyle from. On Apple eras AdaptiveApp's own
+                  // transparent Material (wrapped around the whole app)
+                  // papers over this by accident; that wrap is Apple-only,
+                  // so Android content here rendered with Flutter's fallback
+                  // debug text style — the oversized, red, underlined look —
+                  // until this was added.
+                  child: Material(
+                    type: MaterialType.transparency,
+                    child: Builder(builder: builder),
+                  ),
+                ),
               ),
             ],
           ),

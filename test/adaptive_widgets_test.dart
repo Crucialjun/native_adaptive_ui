@@ -712,6 +712,39 @@ void main() {
       expect(find.byKey(adaptiveSidebarKey), findsNothing);
       expect(find.byKey(adaptiveTabBarKey), findsOneWidget);
     });
+
+    testWidgets(
+      'detail pane picks up a new body on rebuild, not the one from '
+      'its first build',
+      (tester) async {
+        Widget scaffold(Widget body) => AdaptiveNavigationScaffold(
+              destinations: destinations,
+              selectedIndex: 0,
+              onDestinationSelected: (_) {},
+              body: body,
+              style: AdaptiveNavigationStyle.sidebarAdaptable,
+            );
+
+        await pumpEra(
+          tester,
+          DesignEra.ipadLiquidGlass,
+          scaffold(const Text('first')),
+          width: 1024,
+          height: 768,
+        );
+        expect(find.text('first'), findsOneWidget);
+
+        await pumpEra(
+          tester,
+          DesignEra.ipadLiquidGlass,
+          scaffold(const Text('second')),
+          width: 1024,
+          height: 768,
+        );
+        expect(find.text('second'), findsOneWidget);
+        expect(find.text('first'), findsNothing);
+      },
+    );
   });
 
   group('AdaptiveScaffold toolbar', () {

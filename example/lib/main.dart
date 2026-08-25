@@ -99,9 +99,11 @@ class _ExampleAppState extends State<ExampleApp> {
         // convert the sidebar (iPad/macOS) back to a tab bar and restore it.
         style: AdaptiveNavigationStyle.sidebarAdaptable,
         sidebarCollapsed: _sidebarCollapsed,
-        // Lets content show through the glass sidebar on Liquid Glass eras
-        // instead of stopping at its edge.
-        extendContentBehindSidebar: true,
+        // extendContentBehindSidebar is left off (the default) — turning it
+        // on floats the sidebar over full-width content instead of the two
+        // sharing a row, which reads as the panel blocking the page rather
+        // than a background bleeding through it. The gallery keeps the plain
+        // side-by-side layout.
         minimizeOnScroll: true,
         accessory: const _NowPlayingAccessory(),
         // selectedColor/unselectedColor are left unset here on purpose, so

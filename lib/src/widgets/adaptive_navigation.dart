@@ -451,13 +451,25 @@ class AdaptiveNavigationScaffold extends StatelessWidget {
     // The key resets the pane's stack when the destination changes, so
     // switching sections does not leave you three levels deep in the previous
     // one — the same thing iPadOS does.
+    //
+    // The root route's builder cannot just close over `body` — `onGenerateRoute`
+    // only runs again for routes pushed *after* this build, so the very first
+    // (root) route would freeze on whatever `body` looked like the moment the
+    // destination was first shown, and every later rebuild of this scaffold
+    // (an era override changing, a value the page reads from its constructor
+    // rather than an `InheritedWidget` changing) would silently stop reaching
+    // it. Routing the current `body` through `_DetailBodyHost` and reading it
+    // from `context` inside the builder keeps the root route live instead.
     final Widget detail = detailNavigator
-        ? Navigator(
-            key: ValueKey<int>(selectedIndex),
-            onGenerateRoute: (settings) => adaptivePageRoute<void>(
-              context: context,
-              builder: (_) => body,
-              settings: settings,
+        ? _DetailBodyHost(
+            body: body,
+            child: Navigator(
+              key: ValueKey<int>(selectedIndex),
+              onGenerateRoute: (settings) => adaptivePageRoute<void>(
+                context: context,
+                builder: (context) => _DetailBodyHost.of(context),
+                settings: settings,
+              ),
             ),
           )
         : body;
@@ -631,6 +643,26 @@ class AdaptiveNavigationScaffold extends StatelessWidget {
   }
 }
 
+/// Carries the sidebar detail pane's current [body] past the per-tab
+/// [Navigator] that wraps it, so the root route can read the live widget from
+/// `context` on every rebuild instead of the one captured when the route was
+/// first pushed. See the comment above this widget's use in
+/// [AdaptiveNavigationScaffold._buildSidebarLayout].
+class _DetailBodyHost extends InheritedWidget {
+  const _DetailBodyHost({required this.body, required super.child});
+
+  final Widget body;
+
+  static Widget of(BuildContext context) {
+    final host = context.dependOnInheritedWidgetOfExactType<_DetailBodyHost>();
+    assert(host != null, '_DetailBodyHost.of() called outside its host.');
+    return host!.body;
+  }
+
+  @override
+  bool updateShouldNotify(_DetailBodyHost oldWidget) => body != oldWidget.body;
+}
+
 /// Lays the page out under a floating glass bar and keeps the two in step.
 ///
 /// Three things have to stay coordinated and are easy to get wrong separately:
@@ -693,7 +725,7 @@ class _GlassTabScaffoldState extends State<_GlassTabScaffold> {
     widget.onDestinationSelected(index);
   }
 
-  /// Takes [bar] out of composition while a pushed route completely covers it.
+  /// Takes [bar] out of composition while a pushed route covers it.
   ///
   /// Only needed for the native bar, and it is not cosmetic. A platform view is a
   /// real `UIView` in the UIKit hierarchy, and `Navigator` keeps this route alive
@@ -704,10 +736,16 @@ class _GlassTabScaffoldState extends State<_GlassTabScaffold> {
   /// capsule has neither problem: it is Flutter paint, so an opaque route simply
   /// covers it.
   ///
-  /// The trigger is the *secondary* animation reaching `completed` — "the route
-  /// above me has finished arriving" — rather than `isCurrent`, which flips the
-  /// instant a push begins and would make the capsule vanish before the outgoing
-  /// page has started sliding.
+  /// Hidden for the whole push, not just once it finishes: an earlier version
+  /// waited for the *secondary* animation to reach `completed` — "the route
+  /// above me has finished arriving" — but a platform view keeps compositing
+  /// on top of the Flutter-drawn transition for that entire animation, so the
+  /// bar visibly bled through the incoming page for the whole push instead of
+  /// disappearing with it. Hiding as soon as `secondary` leaves `dismissed`
+  /// tracks the same animation frame the slide transition itself starts on,
+  /// so it reads as "gone with the page," not merely "before" or "after" it —
+  /// the concern that ruled out `ModalRoute.isCurrent`, which flips the
+  /// instant `Navigator.push` is called, before the first transition frame.
   ///
   /// `maintainState` keeps the element mounted, so the `UITabBar` is hidden rather
   /// than destroyed and recreated on every push and pop.
@@ -719,7 +757,8 @@ class _GlassTabScaffoldState extends State<_GlassTabScaffold> {
       animation: secondary,
       child: bar,
       builder: (context, child) => Visibility(
-        visible: secondary.status != AnimationStatus.completed,
+        visible: secondary.status == AnimationStatus.dismissed ||
+            secondary.status == AnimationStatus.reverse,
         maintainState: true,
         child: child!,
       ),
