@@ -1,0 +1,22 @@
+PODS:
+  - Flutter (1.0.0)
+  - native_adaptive_ui (0.1.0):
+    - Flutter
+
+DEPENDENCIES:
+  - Flutter (from `Flutter`)
+  - native_adaptive_ui (from `.symlinks/plugins/native_adaptive_ui/ios`)
+
+EXTERNAL SOURCES:
+  Flutter:
+    :path: Flutter
+  native_adaptive_ui:
+    :path: ".symlinks/plugins/native_adaptive_ui/ios"
+
+SPEC CHECKSUMS:
+  Flutter: 71a624a5bc0c04062bf19101d501e466baf2fb47
+  native_adaptive_ui: 3b25e60de2b3c6ce4e6b630bf58c43353d5a38bc
+
+PODFILE CHECKSUM: 3ba3a73b1b12adcf321a227a745625fe0888cc82
+
+COCOAPODS: 1.16.2

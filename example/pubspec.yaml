@@ -1,0 +1,25 @@
+name: native_adaptive_ui_example
+description: Demonstrates every native_adaptive_ui widget across design eras.
+publish_to: none
+version: 0.1.0
+
+environment:
+  sdk: ">=3.6.0 <4.0.0"
+  flutter: ">=3.27.0"
+
+dependencies:
+  cupertino_icons: ^1.0.8
+  flutter:
+    sdk: flutter
+  native_adaptive_ui:
+    path: ../
+
+dev_dependencies:
+  flutter_lints: ^5.0.0
+  flutter_test:
+    sdk: flutter
+
+flutter:
+  uses-material-design: true
+  assets:
+    - assets/icons/

@@ -1,0 +1,67 @@
+group = "dev.gauravraj.native_adaptive_ui"
+version = "0.1.0"
+
+// A plugin's own settings.gradle is ignored when it is included as a subproject
+// of a host app, which is why the toolchain is declared through `buildscript`
+// here rather than a `plugins {}` block. Keep AGP and Kotlin at or below what
+// the host apps in your support window use — a plugin that demands a newer AGP
+// than the app has breaks that app's build with an error that looks nothing
+// like a plugin problem.
+buildscript {
+    ext.kotlin_version = "2.1.0"
+    repositories {
+        google()
+        mavenCentral()
+    }
+    dependencies {
+        classpath "com.android.tools.build:gradle:8.7.3"
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
+    }
+}
+
+rootProject.allprojects {
+    repositories {
+        google()
+        mavenCentral()
+    }
+}
+
+apply plugin: "com.android.library"
+apply plugin: "kotlin-android"
+
+android {
+    namespace = "dev.gauravraj.native_adaptive_ui"
+
+    // API 36 is Android 16 — the release that introduced Material 3 Expressive,
+    // and the level `DesignEra.materialExpressive` keys off. Compiling against
+    // it is what makes that check meaningful rather than aspirational.
+    compileSdk = 36
+
+    compileOptions {
+        sourceCompatibility = JavaVersion.VERSION_17
+        targetCompatibility = JavaVersion.VERSION_17
+    }
+
+    // `kotlinOptions` is soft-deprecated in favour of the top-level
+    // `kotlin { compilerOptions { … } }` block, but that block resolves
+    // differently depending on where the Kotlin plugin is applied from in a
+    // Flutter host app. This form works under both and can be migrated once
+    // Flutter's own plugin template moves.
+    kotlinOptions {
+        jvmTarget = "17"
+    }
+
+    sourceSets {
+        main.java.srcDirs += "src/main/kotlin"
+    }
+
+    defaultConfig {
+        // The plugin itself needs nothing newer; version-specific behaviour is
+        // decided at runtime from Build.VERSION.SDK_INT, not at compile time.
+        minSdk = 21
+    }
+
+    lint {
+        checkReleaseBuilds = false
+    }
+}

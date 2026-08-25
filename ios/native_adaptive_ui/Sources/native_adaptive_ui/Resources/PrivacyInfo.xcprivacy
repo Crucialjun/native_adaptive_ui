@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<!--
+	  This plugin reads the OS version and the user-interface idiom to decide
+	  which design language to render in. None of that leaves the device, none
+	  of it is stored, and none of the APIs used are on Apple's required-reason
+	  list, so all four arrays below are intentionally empty.
+
+	  If a future version adds a required-reason API — file timestamps, disk
+	  space, active keyboards, user defaults — add its entry here in the same
+	  release. An App Store submission is rejected for a missing declaration,
+	  and the rejection lands on the app developer using this plugin, not on us.
+	-->
+	<key>NSPrivacyTracking</key>
+	<false/>
+	<key>NSPrivacyTrackingDomains</key>
+	<array/>
+	<key>NSPrivacyCollectedDataTypes</key>
+	<array/>
+	<key>NSPrivacyAccessedAPITypes</key>
+	<array/>
+</dict>
+</plist>

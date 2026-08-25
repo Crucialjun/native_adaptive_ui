@@ -1,0 +1,47 @@
+name: native_adaptive_ui
+description: >-
+  Adaptive Flutter widgets that resolve by platform, OS version and form factor:
+  Liquid Glass on iOS 26, Material 3 Expressive on Android 16, iPad-aware
+  layouts, with safe fallbacks everywhere else.
+version: 0.1.0
+repository: https://github.com/gauravrajkagwaniya/native_adaptive_ui
+issue_tracker: https://github.com/gauravrajkagwaniya/native_adaptive_ui/issues
+documentation: https://github.com/gauravrajkagwaniya/native_adaptive_ui#readme
+
+topics:
+  - ui
+  - adaptive
+  - cupertino
+  - material
+  - platform
+
+environment:
+  sdk: ">=3.6.0 <4.0.0"
+  flutter: ">=3.27.0"
+
+dependencies:
+  # Supplies the CupertinoIcons font. Widgets such as CupertinoListTileChevron
+  # draw from it, and without the dependency every one of those glyphs renders
+  # as a "?" box in the consuming app.
+  cupertino_icons: ^1.0.8
+  flutter:
+    sdk: flutter
+  # Rasterizes AdaptiveDestination.iconSvgAsset for the native UITabBar — Flutter's
+  # own image pipeline has no SVG decoder, and a native UIImage needs raster bytes.
+  flutter_svg: ^2.2.1
+
+dev_dependencies:
+  flutter_lints: ^6.0.0
+  flutter_test:
+    sdk: flutter
+
+flutter:
+  plugin:
+    platforms:
+      android:
+        package: dev.gauravraj.native_adaptive_ui
+        pluginClass: NativeAdaptiveUiPlugin
+      ios:
+        pluginClass: NativeAdaptiveUiPlugin
+      macos:
+        pluginClass: NativeAdaptiveUiPlugin

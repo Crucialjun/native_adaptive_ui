@@ -1,0 +1,50 @@
+# Dart / Flutter
+.dart_tool/
+.packages
+build/
+doc/api/
+
+# A library's lockfile is not committed: it would pin resolution for consumers
+# who need a different set. App lockfiles are committed; package lockfiles are not.
+pubspec.lock
+example/pubspec.lock
+
+# FVM
+.fvm/
+
+# Xcode / CocoaPods / Swift Package Manager
+.build/
+Pods/
+*.xcworkspace
+xcuserdata/
+.symlinks/
+*.xcodeproj/project.xcworkspace/xcuserdata/
+
+# Android
+.gradle/
+local.properties
+*.iml
+
+# IDE
+.idea/
+.vscode/
+
+# macOS
+.DS_Store
+
+# Verification output — pub publish ships everything git does not ignore.
+verify.log
+*.log
+
+# Claude Code session config — local to this machine, not part of the package.
+.claude/
+
+# Debug scratch artifacts accumulated across sessions — never meant to ship.
+.stage7/
+_cleanup/
+_to_delete/
+_to_delete4/
+*.tar.gz
+shot*.png
+
+# Verification output — pub publish ships everything git does not ignore.
