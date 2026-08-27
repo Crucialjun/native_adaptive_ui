@@ -1,0 +1,65 @@
+name: Tag and release on version bump
+
+# Publishing to pub.dev stays manual (`flutter pub publish`, run locally by
+# a maintainer who's logged in) — this workflow only keeps GitHub in sync
+# with that: it tags the commit that bumped `pubspec.yaml`'s version and
+# creates a matching Release from that version's CHANGELOG.md section, so a
+# published pub.dev version always has a corresponding git tag and release
+# notes without a maintainer doing it by hand.
+on:
+  push:
+    branches: [main]
+    paths:
+      - pubspec.yaml
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Read version from pubspec.yaml
+        id: version
+        run: |
+          v=$(grep '^version:' pubspec.yaml | awk '{print $2}')
+          echo "version=$v" >> "$GITHUB_OUTPUT"
+          echo "tag=v$v" >> "$GITHUB_OUTPUT"
+
+      # Idempotent: a pubspec.yaml change that doesn't bump the version
+      # (e.g. tweaking the description) still triggers this workflow, but
+      # shouldn't create a duplicate tag/release for a version already out.
+      - name: Check whether this version is already tagged
+        id: check
+        run: |
+          if git rev-parse "${{ steps.version.outputs.tag }}" >/dev/null 2>&1; then
+            echo "exists=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "exists=false" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Extract this version's changelog section
+        if: steps.check.outputs.exists == 'false'
+        run: tool/extract_changelog.sh > /tmp/release-notes.md
+
+      - name: Tag the commit
+        if: steps.check.outputs.exists == 'false'
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git tag -a "${{ steps.version.outputs.tag }}" -m "${{ steps.version.outputs.tag }}"
+          git push origin "${{ steps.version.outputs.tag }}"
+
+      - name: Create GitHub Release
+        if: steps.check.outputs.exists == 'false'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh release create "${{ steps.version.outputs.tag }}" \
+            --title "${{ steps.version.outputs.version }}" \
+            --notes-file /tmp/release-notes.md \
+            --latest
