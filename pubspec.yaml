@@ -55,6 +55,8 @@ dev_dependencies:
   flutter_test:
     sdk: flutter
 
+  cupertino_ui: any
+  material_ui: any
 flutter:
   plugin:
     platforms:
