@@ -271,14 +271,17 @@ class AdaptiveScaffold extends StatelessWidget {
       appBar: _hasBar
           ? AppBar(
               title: title == null ? null : Text(title!),
-              // AppBar makes the same judgement CupertinoNavigationBar does,
-              // from ModalRoute rather than the router, so the overrides have
-              // to reach it too — otherwise the two eras disagree about
-              // whether this screen has a back button at all.
-              automaticallyImplyLeading: canPop ?? true,
+              // When canPop/onBack are supplied (e.g. by a router), override the
+              // default ModalRoute/Navigator heuristics and render a back
+              // affordance explicitly.
+              automaticallyImplyLeading: canPop == null && onBack == null,
               leading: leading ??
-                  (onBack != null && (canPop ?? Navigator.canPop(context))
-                      ? BackButton(onPressed: onBack)
+                  ((canPop != null || onBack != null) &&
+                          (canPop ?? Navigator.canPop(context))
+                      ? BackButton(
+                          onPressed:
+                              onBack ?? () => Navigator.of(context).maybePop(),
+                        )
                       : null),
               actions: [
                 ...centerActions,
